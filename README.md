@@ -2,7 +2,7 @@
 **Складність або швидкість алгоритму описують за допомоги нотації О велике (n) - кількість операцій за які алгоритм приходить до фінального результату. Оцінка відбувається по найгіршому результату.**
 
 1. Лінійний пошук -
-   **Нам потрібно знайти елемент масиву під номером 7, ми починаємо з першого елементу і послідовно йдемо по масиву поки не знайдете заданий елемент. В кращому випадку ми знайдемо заданий елемент за одну операцію в гіршому в самому кінці списку. В даному випадку О(n10) якщо масим буде зі 100 елементів тоді О(n100)**
+   **Нам потрібно знайти елемент масиву під номером 7, ми починаємо з першого елементу і послідовно йдемо по масиву поки не знайдете заданий елемент. В кращому випадку ми знайдемо заданий елемент за одну операцію в гіршому в самому кінці списку. В даному випадку О(n10) якщо масим буде зі 100 елементів тоді О(n100) працює за лінійний час**
 
 ```
 const array = [1, 3, 2, 8, 8, 4, 5, 9, 7, 10];
@@ -51,4 +51,61 @@ const quickSort = (arr) => {
 
 console.log(quickSort(array));
 console.log("Кількість операцій:", countOperations);// 215
+```
+
+3. Бінарний пошук
+   **Цей алгоритм в рази швидший за лінійний пошук але він підрозуміває, що масив вже посортований попорядку. Наприклад ми граємо гру вгадай цисло від 1 до 100. Не потрібно перечисляти числа попорядку. Ми знаємо що всі числа йдуть попорядку) і ми можемо почату пошук з середини, наприклад 50 якщо пошукове число більше ніж 50 тоді ми відсіюємо числа які менші 50, в нас залишається числа від 50 до 100. Ділимо на 2 получаємо число 75, пошукове число вже менше . Тоді нам не потрібні числа які більші за 75 і так далі.
+   Швидкість алгоритму буде O(log2n) працює за алгометричний час.**
+
+**Рішення за допомогою рекурсії**
+
+```
+const array = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+];
+
+let countOperations = 0;
+
+const binarySearch = (arr, elem, start, end) => {
+  let midleElement = Math.floor((start + end) / 2);
+  countOperations += 1;
+  if (elem === arr[midleElement]) return midleElement;
+  return elem < arr[midleElement]
+    ? binarySearch(arr, elem, start, midleElement - 1)
+    : binarySearch(arr, elem, midleElement + 1, end);
+};
+
+console.log(binarySearch(array, 12, 0, array.length));
+console.log("Кількість операцій:", countOperations); // 4
+```
+
+**Рішення за допомогою цикла без рекурсії**
+
+```
+const cyclicBinarySearch = (arr, elem) => {
+  let start = 0;
+  let end = arr.length;
+  let midleElement;
+  let founded = false;
+  let position = -1;
+
+  while (founded === false && start <= end) {
+    countOperations += 1;
+    midleElement = Math.floor((start + end) / 2);
+
+    if (arr[midleElement] === elem) {
+      founded = true;
+      position = midleElement;
+      return position;
+    }
+
+    elem < array[midleElement]
+      ? (end = midleElement - 1)
+      : (start = midleElement + 1);
+  }
+  return position;
+};
+
+console.log(cyclicBinarySearch(array, 12));
+console.log("Кількість операцій:", countOperations); // 12
 ```
